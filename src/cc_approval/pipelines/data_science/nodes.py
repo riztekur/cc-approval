@@ -2,7 +2,7 @@ import logging
 
 import pandas as pd
 from sklearn.linear_model import LogisticRegression
-from sklearn.metrics import recall_score
+from sklearn.metrics import f1_score
 from sklearn.model_selection import train_test_split
 
 
@@ -49,6 +49,6 @@ def evaluate_model(
         y_test: Testing data for price.
     """
     y_pred = regressor.predict(X_test)
-    score = recall_score(y_test, y_pred)
+    score = f1_score(y_test, y_pred)
     logger = logging.getLogger(__name__)
-    logger.info("Model has a recall score of %.3f on test data.", score)
+    logger.info("Model has a F1 score of %.3f on test data.", score)
