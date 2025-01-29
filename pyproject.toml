@@ -28,3 +28,6 @@ attr = "cc_approval.__version__"
 [tool.setuptools.packages.find]
 where = [ "src",]
 namespaces = false
+
+[tool.kedro_telemetry]
+project_id = "9aee07a041ae4280a3b2b477b18e514c"

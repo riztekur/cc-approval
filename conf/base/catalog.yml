@@ -1,0 +1,27 @@
+application_record:
+  type: pandas.CSVDataset
+  filepath: data/01_raw/application_record.csv
+
+credit_record:
+  type: pandas.CSVDataset
+  filepath: data/01_raw/credit_record.csv
+
+preprocessed_application:
+  type: pandas.ParquetDataset
+  filepath: data/02_intermediate/preprocessed_application.parquet
+
+preprocessed_credit:
+  type: pandas.ParquetDataset
+  filepath: data/02_intermediate/preprocessed_credit.parquet
+
+merged_dataset:
+  type: pandas.ParquetDataset
+  filepath: data/02_intermediate/merged_dataset.parquet
+
+reduced_dataset:
+  type: pandas.ParquetDataset
+  filepath: data/02_intermediate/reduced_dataset.parquet
+
+woe_dataset:
+  type: pandas.ParquetDataset
+  filepath: data/03_primary/woe_dataset.parquet
