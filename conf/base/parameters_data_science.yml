@@ -1,16 +1,20 @@
 model_options:
   test_size: 0.3
   random_state: 42
-  features:
-    - NAME_INCOME_TYPE_woe
-    - OCCUPATION_TYPE_woe
-    - NAME_HOUSING_TYPE_woe
-    - NAME_FAMILY_STATUS_woe
-    - CNT_CHILDREN_woe
-    - CNT_FAM_MEMBERS_woe
-    - AMT_INCOME_TOTAL_woe
-    - NAME_EDUCATION_TYPE_woe
-    - FLAG_OWN_REALTY_woe
-    - CODE_GENDER_woe
-    - DAYS_BIRTH_woe
-    - DAYS_EMPLOYED_woe
+  target_feature:
+    - IS_APPROVED
+logistic_regression:
+  C: 1.0
+  class_weight: 'balanced'
+  dual: False
+  fit_intercept: True
+  intercept_scaling: 1
+  max_iter: 1000
+  multi_class: 'auto'
+  n_jobs: -1
+  penalty: 'l2'
+  random_state: 123
+  solver: 'lbfgs'
+  tol: 0.0001
+  verbose: 0
+  warm_start: False

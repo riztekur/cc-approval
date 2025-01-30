@@ -1,54 +1,52 @@
-import logging
-
 import pandas as pd
+import matplotlib
+import scorecardpy as sc
 from sklearn.linear_model import LogisticRegression
-from sklearn.metrics import f1_score
 from sklearn.model_selection import train_test_split
 
+matplotlib.use("Agg")
 
 def split_data(data: pd.DataFrame, parameters: dict) -> tuple:
-    """Splits data into features and targets training and test sets.
-
-    Args:
-        data: Data containing features and target.
-        parameters: Parameters defined in parameters/data_science.yml.
-    Returns:
-        Split data.
-    """
-    X = data[parameters["features"]]
-    y = data["IS_APPROVED"]
+    X = data.drop(columns=parameters["target_feature"])
+    y = data[parameters["target_feature"]]
     X_train, X_test, y_train, y_test = train_test_split(
-        X, y, test_size=parameters["test_size"], random_state=parameters["random_state"]
+        X, y, test_size=parameters["test_size"], random_state=parameters["random_state"], stratify=y
     )
     return X_train, X_test, y_train, y_test
 
 
-def train_model(X_train: pd.DataFrame, y_train: pd.Series) -> LogisticRegression:
-    """Trains the linear regression model.
-
-    Args:
-        X_train: Training data of independent features.
-        y_train: Training data for price.
-
-    Returns:
-        Trained model.
-    """
-    regressor = LogisticRegression()
+def train_model(X_train: pd.DataFrame, y_train: pd.Series, parameters: dict) -> LogisticRegression:
+    regressor = LogisticRegression(**parameters)
     regressor.fit(X_train, y_train)
     return regressor
 
 
 def evaluate_model(
-    regressor: LogisticRegression, X_test: pd.DataFrame, y_test: pd.Series
+    regressor: LogisticRegression, 
+    X_train: pd.DataFrame,
+    X_test: pd.DataFrame, 
+    y_train: pd.Series,
+    y_test: pd.Series
 ):
-    """Calculates and logs the coefficient of determination.
+    train_pred = regressor.predict_proba(X_train)[:,1]
+    test_pred = regressor.predict_proba(X_test)[:,1]
 
-    Args:
-        regressor: Trained model.
-        X_test: Testing data of independent features.
-        y_test: Testing data for price.
-    """
-    y_pred = regressor.predict(X_test)
-    score = f1_score(y_test, y_pred)
-    logger = logging.getLogger(__name__)
-    logger.info("Model has a F1 score of %.3f on test data.", score)
+    train_perf = sc.perf_eva(y_train.squeeze(), train_pred, title = "train", plot_type=["ks", "roc"])
+    test_perf = sc.perf_eva(y_test.squeeze(), test_pred, title = "test", plot_type=["ks", "roc"])
+
+    performance_summary = {
+        'KS': {
+            'train': train_perf['KS'],
+            'test': test_perf['KS']
+        },
+        'AUC': {
+            'train': train_perf['AUC'],
+            'test': test_perf['AUC']
+        },
+        'Gini': {
+            'train': train_perf['Gini'],
+            'test': test_perf['Gini']
+        }
+    }
+
+    return performance_summary, train_perf['pic'], test_perf['pic'], 

@@ -1,8 +1,8 @@
-application_record:
+raw_application_record:
   type: pandas.CSVDataset
   filepath: data/01_raw/application_record.csv
 
-credit_record:
+raw_credit_record:
   type: pandas.CSVDataset
   filepath: data/01_raw/credit_record.csv
 
@@ -18,6 +18,10 @@ merged_dataset:
   type: pandas.ParquetDataset
   filepath: data/02_intermediate/merged_dataset.parquet
 
+engineered_dataset:
+  type: pandas.ParquetDataset
+  filepath: data/02_intermediate/engineered_dataset.parquet
+
 reduced_dataset:
   type: pandas.ParquetDataset
   filepath: data/02_intermediate/reduced_dataset.parquet
@@ -25,3 +29,15 @@ reduced_dataset:
 woe_dataset:
   type: pandas.ParquetDataset
   filepath: data/03_primary/woe_dataset.parquet
+
+performance_summary:
+  type: json.JSONDataset
+  filepath: data/08_reporting/performance_summary.json
+
+train_performance_viz:
+  type: matplotlib.MatplotlibWriter
+  filepath: data/08_reporting/train_performance_viz.png
+
+test_performance_viz:
+  type: matplotlib.MatplotlibWriter
+  filepath: data/08_reporting/test_performance_viz.png
