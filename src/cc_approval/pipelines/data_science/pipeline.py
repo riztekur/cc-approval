@@ -14,13 +14,13 @@ def create_pipeline(**kwargs) -> Pipeline:
             ),
             node(
                 func=train_model,
-                inputs=["X_train", "y_train","params:logistic_regression"],
+                inputs=["X_train", "y_train", "params:xgboost_classifier"],
                 outputs="regressor",
                 name="train_model_node",
             ),
             node(
                 func=evaluate_model,
-                inputs=["regressor", "X_train", "X_test", "y_train", "y_test"],
+                inputs=["regressor", "bins", "X_train", "X_test", "y_train", "y_test"],
                 outputs=["performance_summary","train_performance_viz","test_performance_viz"],
                 name="evaluate_model_node",
             ),
